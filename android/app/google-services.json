@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "371466923603",
+    "project_id": "bootstrap-65360",
+    "storage_bucket": "bootstrap-65360.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371466923603:android:32bb472113665b889820a6",
+        "android_client_info": {
+          "package_name": "com.example.bootstrap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHdGi-1BqYmeJDXvCcLpBZHEX0TjYjzWA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
