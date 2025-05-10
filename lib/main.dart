@@ -253,6 +253,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontWeight: FontWeight.bold,
                           )
                         ),
+                        keyboardType: TextInputType.multiline, // allow multiline input
+                        maxLines: null,                        // allow the text box to grow
                       )
                     )
                   ),
