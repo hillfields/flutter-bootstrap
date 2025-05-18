@@ -204,11 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   )
                                 );
                               },
-                              // icon: Icon(
-                              //   Icons.delete,
-                              //   size: 30,
-                              //   color: Colors.white,
-                              // ),
+
                               icon: Container(
                                 padding: EdgeInsets.all(10),
                                 child: Icon(
@@ -227,6 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ),
 
+            SizedBox(height: 20),
 
             Expanded(
               flex: 10,
