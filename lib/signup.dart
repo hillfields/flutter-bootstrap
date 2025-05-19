@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpScreen extends StatefulWidget {
+  // Constructor
+  const SignUpScreen({super.key});
+
+  // Create the state for the SignUpScreen widget
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  SignUpScreenState createState() => SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class SignUpScreenState extends State<SignUpScreen> {
   // Initialize controllers and FirebaseAuth instance
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
