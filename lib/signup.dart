@@ -36,14 +36,12 @@ class SignUpScreenState extends State<SignUpScreen> {
         password: _passwordController.text,
       );
 
-      if (!mounted) return;
-
       // Navigate to the home screen once the account is created
+      if (!mounted) return;
       Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
-      if (!mounted) return;
-
       // Show error message if the user is not able to sign up
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Sign up failed: $e'),

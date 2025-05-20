@@ -39,8 +39,9 @@ class MyApp extends StatelessWidget {
       title: 'Private Twitter',
       // If the user is not logged in, show the login screen
       // Otherwise, show the home screen
-      initialRoute:
-          FirebaseAuth.instance.currentUser == null ? '/login' : '/home',
+      initialRoute: FirebaseAuth.instance.currentUser == null
+        ? '/login'
+        : '/home',
       // Define the screens that can be navigated to
       routes: {
         '/login': (context) => LoginScreen(),
