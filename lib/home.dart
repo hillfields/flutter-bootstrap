@@ -79,6 +79,17 @@ class _HomeScreenState extends State<HomeScreen> {
               
               // Build the title
               builder: (context, snapshot) {
+                // If there is no display name, show the default title 'Posts'
+                if (!snapshot.hasData || !snapshot.data!.exists) {
+                  return Text(
+                    "User's Posts",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                    ),
+                  );
+                }
+
                 final displayName = snapshot.data?.get('displayName') as String? ?? 'Posts';
                 return Text(
                   "$displayName's Posts",
@@ -104,144 +115,152 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   })
             ]),
-        body: Container(
-            margin: EdgeInsets.all(20),
-            child: Column(children: [
-              Expanded(
-                  flex: 90,
-                  child: StreamBuilder<QuerySnapshot>(
-                      // Retrieve the posts from the Firestore database
-                      stream: _firestore
-                          .collection('posts')
-                          .where('userId', isEqualTo: _auth.currentUser?.uid)
-                          .orderBy('timestamp', descending: true)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        // Show error if the program fails to retrieve posts
-                        if (snapshot.hasError) {
-                          return Center(
-                              child: Text('Error: ${snapshot.error}'));
-                        }
+        resizeToAvoidBottomInset: true,
+        body: SafeArea(
+          child: Container(
+              margin: EdgeInsets.all(20),
+              child: Column(children: [
+                Expanded(
+                    flex: 90,
+                    child: StreamBuilder<QuerySnapshot>(
+                        // Retrieve the posts from the Firestore database
+                        stream: _firestore
+                            .collection('posts')
+                            .where('userId', isEqualTo: _auth.currentUser?.uid)
+                            .orderBy('timestamp', descending: true)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          // Show error if the program fails to retrieve posts
+                          if (snapshot.hasError) {
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
+                          }
 
-                        // Show loading symbol while the program is retrieving posts
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
-                        }
+                          // Show loading symbol while the program is retrieving posts
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          }
 
-                        // Build the list of posts
-                        return ListView.builder(
-                            itemCount: snapshot.data!.docs.length,
-                            itemBuilder: (context, index) {
-                              // Retrieve the current post to build
-                              final doc = snapshot.data!.docs[index];
+                          // Build the list of posts
+                          return ListView.builder(
+                              itemCount: snapshot.data!.docs.length,
+                              itemBuilder: (context, index) {
+                                // Retrieve the current post to build
+                                final doc = snapshot.data!.docs[index];
 
-                              // Retrieve the data for the current post as a map (key-value pairs)
-                              final data = doc.data() as Map<String, dynamic>;
+                                // Retrieve the data for the current post as a map (key-value pairs)
+                                final data = doc.data() as Map<String, dynamic>;
 
-                              // Format the timestamp
-                              final timestamp = data['timestamp'] as Timestamp?;
-                              final date = timestamp != null
-                                  ? DateFormat('MM/dd/yyyy HH:mm:ss').format(timestamp.toDate())
-                                  : 'Loading...';
+                                // Format the timestamp
+                                final timestamp = data['timestamp'] as Timestamp?;
+                                final date = timestamp != null
+                                    ? DateFormat('MM/dd/yyyy HH:mm:ss').format(timestamp.toDate())
+                                    : 'Loading...';
 
-                              // Build the box containing the post
-                              return Padding(
-                                padding: EdgeInsets.only(bottom: 16),
-                                child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    color: Colors.blue,
-                                    child: Container(
-                                      padding: EdgeInsets.all(12),
-                                      child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    date,
-                                                    style: TextStyle(
-                                                      color: Colors.white70,
-                                                      fontSize: 16,
-                                                      fontWeight: FontWeight.bold,
+                                // Build the box containing the post
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: 16),
+                                  child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      color: Colors.blue,
+                                      child: Container(
+                                        padding: EdgeInsets.all(12),
+                                        child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      date,
+                                                      style: TextStyle(
+                                                        color: Colors.white70,
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  IconButton(
-                                                    padding: EdgeInsets.zero,
-                                                    constraints: BoxConstraints(),
-                                                    onPressed: () {
-                                                      showDialog(
-                                                          context:
-                                                              context,
-                                                          builder: (context) =>
-                                                              AlertDialog(
-                                                                  title: Text('Confirm post deletion'),
-                                                                  content: Text('Are you sure you want to delete this post?'),
-                                                                  actions: [
-                                                                    TextButton(
-                                                                        onPressed: () => Navigator.of(context).pop(),
-                                                                        child: Text('Cancel')),
-                                                                    TextButton(
-                                                                        onPressed: () {
-                                                                          Navigator.of(context).pop();
-                                                                          deletePost(doc.id);
-                                                                        },
-                                                                        child: Text('Delete'))
-                                                                  ]));
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.delete,
-                                                      size: 24,
-                                                      color: Colors
-                                                          .white,
+                                                    IconButton(
+                                                      padding: EdgeInsets.zero,
+                                                      constraints: BoxConstraints(),
+                                                      onPressed: () {
+                                                        showDialog(
+                                                            context:
+                                                                context,
+                                                            builder: (context) =>
+                                                                AlertDialog(
+                                                                    title: Text('Confirm post deletion'),
+                                                                    content: Text('Are you sure you want to delete this post?'),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                          onPressed: () => Navigator.of(context).pop(),
+                                                                          child: Text('Cancel')),
+                                                                      TextButton(
+                                                                          onPressed: () {
+                                                                            Navigator.of(context).pop();
+                                                                            deletePost(doc.id);
+                                                                          },
+                                                                          child: Text('Delete'))
+                                                                    ]));
+                                                      },
+                                                      icon: Icon(
+                                                        Icons.delete,
+                                                        size: 24,
+                                                        color: Colors
+                                                            .white,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ]),
-                                            SizedBox(height: 6),
-                                            Text(data['content'] ?? '',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 18,
-                                                ))
-                                          ]),
-                                    )),
-                              );
-                            });
-                      })),
+                                                  ]),
+                                              SizedBox(height: 6),
+                                              Text(data['content'] ?? '',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18,
+                                                  ))
+                                            ]),
+                                      )),
+                                );
+                              });
+                        })),
 
-              // Spacing above text input field
-              SizedBox(height: 20),
+                // Spacing above text input field
+                SizedBox(height: 20),
 
-              Expanded(
-                  flex: 10,
+                // Text input section
+                Container(
+                  constraints: BoxConstraints(
+                    minHeight: 60,
+                    maxHeight: 120,  // Allow up to 3 lines
+                  ),
                   child: Row(children: [
                     // Text input field for post
                     Expanded(
                         flex: 70,
-                        child: SizedBox(
-                            height: 60,
-                            child: TextFormField(
-                              controller: _controller,
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(
-                                        color: Colors.blue,
-                                        width: 2,
-                                      )),
-                                  labelText: 'Write down your thoughts...',
-                                  labelStyle: TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold,
+                        child: TextFormField(
+                          onTapOutside: (event) {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                          controller: _controller,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                    color: Colors.blue,
+                                    width: 2,
                                   )),
-                              keyboardType: TextInputType.multiline, // Allow for multiline input
-                              maxLines: null, // Allow the text box to grow
-                            ))),
+                              labelText: 'Write down your thoughts...',
+                              labelStyle: TextStyle(
+                                color: Colors.black54,
+                                fontWeight: FontWeight.bold,
+                              )),
+                          keyboardType: TextInputType.multiline,
+                          minLines: 1,
+                          maxLines: 3,  // Allow up to 3 lines
+                        )),
                     SizedBox(width: 10),
 
                     // Create post button
@@ -265,7 +284,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       child: Icon(Icons.send),
                     )
-                  ]))
-            ])));
+                  ]),
+                )
+              ])),
+        ),
+    );
   }
 }
