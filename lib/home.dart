@@ -110,31 +110,41 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                   flex: 90,
                   child: StreamBuilder<QuerySnapshot>(
+                      // Retrieve the posts from the Firestore database
                       stream: _firestore
                           .collection('posts')
                           .where('userId', isEqualTo: _auth.currentUser?.uid)
                           .orderBy('timestamp', descending: true)
                           .snapshots(),
                       builder: (context, snapshot) {
+                        // Show error if the program fails to retrieve posts
                         if (snapshot.hasError) {
                           return Center(
                               child: Text('Error: ${snapshot.error}'));
                         }
 
+                        // Show loading symbol while the program is retrieving posts
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator());
                         }
 
+                        // Build the list of posts
                         return ListView.builder(
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
+                              // Retrieve the current post to build
                               final doc = snapshot.data!.docs[index];
+
+                              // Retrieve the data for the current post as a map (key-value pairs)
                               final data = doc.data() as Map<String, dynamic>;
+
+                              // Format the timestamp
                               final timestamp = data['timestamp'] as Timestamp?;
                               final date = timestamp != null
                                   ? DateFormat('MM/dd/yyyy HH:mm:ss').format(timestamp.toDate())
                                   : 'Loading...';
 
+                              // Build the box containing the post
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 16),
                                 child: Card(
