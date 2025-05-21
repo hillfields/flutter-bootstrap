@@ -7,10 +7,10 @@ class SignUpScreen extends StatefulWidget {
 
   // Create the state for the SignUpScreen widget
   @override
-  SignUpScreenState createState() => SignUpScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   // Initialize controllers and FirebaseAuth instance
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();

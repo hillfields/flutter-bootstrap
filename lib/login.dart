@@ -7,10 +7,10 @@ class LoginScreen extends StatefulWidget {
 
   // Create the state for the LoginScreen widget
   @override
-  LoginScreenState createState() => LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   // Initialize controllers and FirebaseAuth instance
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -49,7 +49,7 @@ class LoginScreenState extends State<LoginScreen> {
             children: [
               // Title
               Text(
-                'Login',
+                'Twitter for Self',
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
