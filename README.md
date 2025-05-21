@@ -1,16 +1,15 @@
-# bootstrap
+# Twitter for Self
 
-A new Flutter project.
+Flutter project to imitate posting on a Twitter/X private account.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Login and sign up for an account using email and password
+- View, create, and delete your own posts similar to how you would on Twitter/X
+- Change your display name and account password in the settings screen
 
-A few resources to get you started if this is your first Flutter project:
+## Tools
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **Dart** for programming the UI and functionality of the app
+- **Firebase** for user authentication
+- **Firestore** to store each user's posts and display name in a database
