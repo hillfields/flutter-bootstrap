@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
     // MaterialApp is a widget that provides the structure for the app
     // This includes navigation between screens, consistent themes, etc.
     return MaterialApp(
-      title: 'Private Twitter',
+      title: 'Twitter for Self',
       // If the user is not logged in, show the login screen
       // Otherwise, show the home screen
       initialRoute: FirebaseAuth.instance.currentUser == null
